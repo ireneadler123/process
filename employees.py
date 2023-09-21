@@ -113,5 +113,5 @@ result['% Vị mới'] = round(result['Bán ra vị mới (Thùng)'] / result['C
 result['Tổng hoành thành'] = result['% DS'] + result['% Vị mới']
 
 st.header('Hoàn thành kênh MT Đông Nam Bộ 1')
-st.warning('Lưu ý: Nếu % vị mới > 24 thì sẽ tính bằng 24')
+st.warning('Lưu ý: Nếu % vị mới > 24 thì sẽ tính = 24')
 st.table(result)
