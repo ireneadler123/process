@@ -6,8 +6,16 @@ import plotly.express as px
 import os
 import warnings
 warnings.filterwarnings('ignore')
+from streamlit_custom_notification_box import custom_notification_box
 
 st.set_page_config(page_title = 'Theo dõi số nhân viên bán hàng', page_icon = ':trophy:', layout = 'wide')
+styles = {'material-icons':{'color': 'yellow'},
+          'text-icon-link-close-container': {'box-shadow': '#3896de 0px 4px'},
+          'notification-text': {'':''},
+          'close-button':{'':''},
+          'link':{'':''}}
+
+custom_notification_box(icon='info', textDisplay='Nên quay ngang màn hình nếu sử dụng điện thoại',externalLink=' ', url=' ', styles=styles, key="foo")
 
 st.title('Theo dõi số nhân viên bán hàng')
 
