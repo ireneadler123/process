@@ -16,6 +16,7 @@ df['Mã NV'] = df['Mã NV'].astype('str')
 searchDMS = st.radio('Điền tên DMS vào đây', df['Tên NV'].unique())
 df_employees = df[df['Tên NV'] == searchDMS]
 
+st.info('Dữ liệu được cập nhất đến ngày ' + ((pd.to_datetime(df_employees['Ngày lấy đơn'], dayfirst = True)).astype('str')).max())
 # Dataframe of sale
 df_employees = df_employees[df_employees['Trạng thái'] == 'Đã duyệt']
 df_employees['Month'] =(pd.to_datetime(df_employees['Ngày lấy đơn'], dayfirst = True).dt.month)
@@ -113,5 +114,5 @@ result['% Vị mới'] = round(result['Bán ra vị mới (Thùng)'] / result['C
 result['Tổng hoành thành'] = result['% DS'] + result['% Vị mới']
 
 st.header('Hoàn thành kênh MT Đông Nam Bộ 1')
-st.warning('Lưu ý: Nếu % vị mới > 24 thì sẽ tính = 24')
+st.warning('Lưu ý: Nếu % vị mới > 24 thì sẽ tính bằng 24')
 st.table(result)
