@@ -11,9 +11,25 @@ st.set_page_config(page_title = 'Theo dõi số nhân viên bán hàng', page_ic
 
 st.title('Theo dõi số nhân viên bán hàng')
 
+st.markdown('''<style>
+                body{
+                    font-family: calibri;
+                }
+                .css-10trblm{
+                    text-align:center;
+                    text-transform: uppercase;
+                }
+            </style>''', unsafe_allow_html=True)
+
+
+
 df = pd.read_csv('Vinasoy.csv')
 df['Mã NV'] = df['Mã NV'].astype('str')
-searchDMS = st.radio('Điền tên DMS vào đây', df['Tên NV'].unique())
+
+radio1, radio2 = st.columns((2))
+with radio1:
+    searchDMS = st.radio('Chọn tên NV: ', df['Tên NV'].unique())
+
 df_employees = df[df['Tên NV'] == searchDMS]
 
 st.info('Dữ liệu được cập nhất đến ngày ' + ((pd.to_datetime(df_employees['Ngày lấy đơn'], dayfirst = True)).astype('str')).max())
@@ -112,7 +128,59 @@ result = result.rename(columns = {'Month': 'Tháng',
 result['% DS'] = round(result['Thực hiện doanh số (VNĐ)'] / result['Chỉ tiêu doanh số (VNĐ)'] * 100 * 0.7, 2)
 result['% Vị mới'] = round(result['Bán ra vị mới (Thùng)'] / result['Chỉ tiêu vị mới (thùng)'] * 100 * 0.2, 2)
 result['Tổng hoành thành'] = result['% DS'] + result['% Vị mới']
-
-st.header('Hoàn thành kênh MT Đông Nam Bộ 1')
 st.warning('Lưu ý: Nếu % vị mới > 24 thì sẽ tính bằng 24')
 st.table(result)
+
+# Charts
+# df_employees['Ngày lấy đơn'] = df_employees['Ngày lấy đơn'].agg(lambda x: x[0])
+df_employees['Month'] = pd.to_datetime(df_employees['Ngày lấy đơn'], dayfirst = True).dt.month
+df_employees['Month'] = df_employees['Month'].map({
+    1: 'Tháng 1/2023',
+    2: 'Tháng 2/2023',
+    3: 'Tháng 3/2023',
+    4: 'Tháng 4/2023',
+    5: 'Tháng 5/2023',
+    6: 'Tháng 6/2023',
+    7: 'Tháng 7/2023',
+    8: 'Tháng 8/2023',
+    9: 'Tháng 9/2023',
+    10: 'Tháng 10/2023',
+    11: 'Tháng 11/2023',
+    12: 'Tháng 12/2023'
+})
+
+with radio2:
+    months = st.radio('Chọn tháng: ', df_employees['Month'].unique())
+
+df_SBD = df_employees[df_employees['Month'] == months]
+
+df_SBD['Ngày lấy đơn'] = df_SBD['Ngày lấy đơn'].str.split(' ')
+df_SBD['Ngày lấy đơn'] = df_SBD['Ngày lấy đơn'].agg(lambda x: x[0])
+
+SBD = df_SBD.groupby(by = 'Ngày lấy đơn').agg({'Thành tiền': 'sum'}).reset_index()
+
+line, pie = st.columns((2))
+
+with line:
+    # Line chart
+    lineChart = px.line(SBD, x = SBD['Ngày lấy đơn'], y = SBD['Thành tiền'], title = 'Doanh số bán ra theo ngày')
+    st.plotly_chart(lineChart, use_container_width = True, height = 200)
+
+with pie:
+    #  Pie chart
+    sys = df_SBD['Tên KH'].str.split(' ')
+    system = sys.agg(lambda x: x[0])
+    df_SBD['Hệ thống'] = system
+    systems = df_SBD.groupby(by = 'Hệ thống').agg({'Thành tiền': 'sum'}).reset_index()
+    systems['Hệ thống'] = systems['Hệ thống'].map({
+            'BHX': 'Bách Hóa Xanh',
+            'VMP': 'Vincommerce',
+            'Lotte': 'Lotte Mart',
+            'MM': 'Mega Market',
+            'VM': 'Vincommerce',
+            'BigC': 'BigC và Go!',
+            'Coopfood': 'Sài Gòn Coop',
+            'Coopmart': 'Sài Gòn Coop'
+    })
+    pieChart = px.pie(systems, values = systems['Thành tiền'], names = systems['Hệ thống'], title = 'Tỷ lệ đóng góp của các hệ thống siêu thị')
+    st.plotly_chart(pieChart, use_container_width = True, height = 200)
