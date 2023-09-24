@@ -163,11 +163,13 @@ line, pie = st.columns((2))
 
 with line:
     # Line chart
-    lineChart = px.line(SBD, x = SBD['Ngày lấy đơn'], y = SBD['Thành tiền'], title = 'Doanh số bán ra theo ngày')
+    st.subheader('Doanh số bán ra theo ngày')
+    lineChart = px.line(SBD, x = SBD['Ngày lấy đơn'], y = SBD['Thành tiền'])
     st.plotly_chart(lineChart, use_container_width = True, height = 200)
 
 with pie:
     #  Pie chart
+    st.subheader('Tỷ lệ đóng góp của các hệ thống siêu thị')
     sys = df_SBD['Tên KH'].str.split(' ')
     system = sys.agg(lambda x: x[0])
     df_SBD['Hệ thống'] = system
@@ -182,5 +184,5 @@ with pie:
             'Coopfood': 'Sài Gòn Coop',
             'Coopmart': 'Sài Gòn Coop'
     })
-    pieChart = px.pie(systems, values = systems['Thành tiền'], names = systems['Hệ thống'], title = 'Tỷ lệ đóng góp của các hệ thống siêu thị')
+    pieChart = px.pie(systems, values = systems['Thành tiền'], names = systems['Hệ thống'])
     st.plotly_chart(pieChart, use_container_width = True, height = 200)
