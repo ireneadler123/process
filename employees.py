@@ -129,6 +129,7 @@ result['% DS'] = round(result['Thực hiện doanh số (VNĐ)'] / result['Chỉ
 result['% Vị mới'] = round(result['Bán ra vị mới (Thùng)'] / result['Chỉ tiêu vị mới (thùng)'] * 100 * 0.2, 2)
 result['Tổng hoành thành'] = result['% DS'] + result['% Vị mới']
 st.warning('Lưu ý: Nếu % vị mới > 24 thì sẽ tính bằng 24')
+st.subheader('Hoàn thành của nhân viên theo tháng')
 st.table(result)
 
 # Charts
