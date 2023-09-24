@@ -28,7 +28,7 @@ df['Mã NV'] = df['Mã NV'].astype('str')
 
 radio1, radio2 = st.columns((2))
 with radio1:
-    searchDMS = st.radio('Chọn tên NV: ', df['Tên NV'].unique())
+    searchDMS = st.sidebar.radio('Chọn tên NV: ', df['Tên NV'].unique())
 
 df_employees = df[df['Tên NV'] == searchDMS]
 
@@ -150,7 +150,7 @@ df_employees['Month'] = df_employees['Month'].map({
 })
 
 with radio2:
-    months = st.radio('Chọn tháng: ', df_employees['Month'].unique())
+    months = st.sidebar.radio('Chọn tháng: ', df_employees['Month'].unique())
 
 df_SBD = df_employees[df_employees['Month'] == months]
 
