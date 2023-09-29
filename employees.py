@@ -28,7 +28,7 @@ df['Mã NV'] = df['Mã NV'].astype('str')
 
 radio1, radio2 = st.columns((2))
 with radio1:
-    searchDMS = st.sidebar.radio('Chọn tên NV: ', df['Tên NV'].unique())
+    searchDMS = st.sidebar.selectbox('Chọn tên NV: ', df['Tên NV'].unique())
 
 df_employees = df[df['Tên NV'] == searchDMS]
 
