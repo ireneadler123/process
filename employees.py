@@ -151,7 +151,7 @@ df_employees['Month'] = df_employees['Month'].map({
 })
 
 with radio2:
-    months = st.sidebar.radio('Chọn tháng: ', df_employees['Month'].unique())
+    months = st.sidebar.selectbox('Chọn tháng: ', df_employees['Month'].unique())
 
 df_SBD = df_employees[df_employees['Month'] == months]
 
